@@ -58,6 +58,15 @@ def find_slice(block):
         if uses and uses[0] < first:
             first = uses[0]
 
+    # The anchor is the last matched line, which may sit inside a block. Extend
+    # forward until braces balance so the slice is never cut mid-function.
+    def imbalance(a, b):
+        text = "\n".join(lines[a:b + 1])
+        return text.count("{") - text.count("}")
+
+    while last + 1 < len(lines) and imbalance(first, last) > 0:
+        last += 1
+
     return "\n".join(lines[first:last + 1])
 
 fence = re.compile(r"(<!-- illustrative -->\n)?```rust\n(.*?)```", re.S)
