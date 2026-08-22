@@ -185,6 +185,28 @@ inside an instanced sub-scene are owned by *that* scene:
 root.find_children_ex("*").type_("Marker3D").owned(false).done()
 ```
 
+### `--import` aborts (exit 134) but the import worked
+
+```
+Aborted (core dumped)
+##[error]Process completed with exit code 134
+```
+
+The headless *editor* completes the filesystem scan and then crashes while
+shutting down. It happens on some CI runners and container images and not on
+most desktops, and the scan itself succeeded — the import is fine.
+
+Do not trust the exit code here. Check for the artifact the scan produces:
+
+```bash
+godot4 --headless --path godot --import || true
+test -f godot/.godot/extension_list.cfg
+```
+
+`extension_list.cfg` exists only once the extension has been discovered and
+registered, so it is the thing actually worth asserting on. This repository's CI
+does exactly that.
+
 ### Behaviour does not match the code
 
 The editor is running a stale library.
