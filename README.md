@@ -30,7 +30,7 @@ borrow-checker problems peculiar to gameplay code are all taught from scratch.
 | Tool | Version |
 |---|---|
 | Godot | 4.7.2 (standard build — **not** .NET) |
-| Rust | 1.87 or newer |
+| Rust | 1.94 or newer |
 | `godot` crate (gdext) | 0.5.5 |
 
 [Lesson 0](tutorial/00-setup.md) installs all of it on Linux, macOS and Windows.
@@ -38,20 +38,20 @@ borrow-checker problems peculiar to gameplay code are all taught from scratch.
 ## Running the reference build
 
 ```bash
-# Build the extension
+# 1. Build the extension
 cargo build --manifest-path reference/rust/Cargo.toml
 
-# Play it
+# 2. Import once, so Godot discovers the extension and registers the classes.
+#    Required after a fresh clone. Skipping it gives you a wall of
+#    "Cannot get class 'Main'" errors.
+godot4 --headless --path reference/godot --import
+
+# 3. Play it
 godot4 --path reference/godot
 
 # The test suite -- 48 checks, no window needed
 godot4 --headless --path reference/godot res://tests/tests.tscn
 ```
-
-The first `godot4 --path` after a clean checkout imports the project and
-registers the extension. Until that has happened once, the Rust node types do
-not exist yet and scenes load as placeholders — see
-[Lesson 0](tutorial/00-setup.md).
 
 ## Why Rust for a Godot game
 
