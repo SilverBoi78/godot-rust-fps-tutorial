@@ -217,6 +217,7 @@ stops you publishing it by accident.
 
 Replace `rust/src/lib.rs` entirely:
 
+<!-- illustrative -->
 ```rust
 use godot::prelude::*;
 
@@ -349,6 +350,7 @@ layout, this is the line to change.
 
 We need something to look for. Add this to the bottom of `rust/src/lib.rs`:
 
+<!-- illustrative -->
 ```rust
 /// A throwaway class, purely to prove the extension is loading. Lesson 2
 /// replaces it with something that actually does a job.

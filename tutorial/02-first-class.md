@@ -19,6 +19,7 @@ numbers and recompiling.
 
 Here is the smallest useful one, with every part labelled:
 
+<!-- illustrative -->
 ```rust
 use godot::prelude::*;
 use godot::classes::{INode3D, Node3D};
@@ -96,6 +97,7 @@ twice.
 
 Consider rotating something. The naive version:
 
+<!-- illustrative -->
 ```rust
 fn process(&mut self, _delta: f64) {
     self.base_mut().rotate_y(0.05);      // WRONG
@@ -311,6 +313,7 @@ a *method pair*, not a field.
 
 Note the shape of it in `process`:
 
+<!-- illustrative -->
 ```rust
 let y = self.bob_offset();                     // read first
 let mut position = self.base().get_position();

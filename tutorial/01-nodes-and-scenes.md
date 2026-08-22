@@ -78,6 +78,7 @@ In a GDScript project, you add behaviour by *attaching a script to a node*. A
 **Rust does not work that way, and this trips up everyone who has seen a GDScript
 tutorial first.** There is no "attach Rust script" button. Instead:
 
+<!-- illustrative -->
 ```rust
 #[derive(GodotClass)]
 #[class(base = CharacterBody3D)]
@@ -108,6 +109,7 @@ means grepping your `.tscn` files.
 
 Look at that struct again:
 
+<!-- illustrative -->
 ```rust
 pub struct Player {
     base: Base<CharacterBody3D>,

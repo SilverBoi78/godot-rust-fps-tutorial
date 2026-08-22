@@ -16,7 +16,7 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(tool, base=StaticBody3D, init)]
 pub struct Wall {
-    /// A setter runs the rebuild. `#[var(get, set = ...)]` is how gdext spells
+    /// A setter runs the rebuild. `#[var(set = ...)]` is how gdext spells
     /// GDScript's inline `set:` block.
     #[export]
     #[var(set = set_size)]
