@@ -42,14 +42,14 @@ impl IStaticBody3D for TargetDummy {
         // Duplicate the material so flashing this dummy doesn't flash every
         // other dummy sharing the same resource. Shared-resource surprises like
         // this are a classic Godot gotcha.
-        if let Some(active) = self.mesh.get_active_material(0) {
-            if let Ok(std_mat) = active.try_cast::<StandardMaterial3D>() {
-                let copy = std_mat.duplicate_resource();
-                self.mesh.set_surface_override_material(0, &copy);
-                self.head_mesh.set_surface_override_material(0, &copy);
-                self.base_color = copy.get_albedo();
-                self.material = Some(copy);
-            }
+        if let Some(active) = self.mesh.get_active_material(0)
+            && let Ok(std_mat) = active.try_cast::<StandardMaterial3D>()
+        {
+            let copy = std_mat.duplicate_resource();
+            self.mesh.set_surface_override_material(0, &copy);
+            self.head_mesh.set_surface_override_material(0, &copy);
+            self.base_color = copy.get_albedo();
+            self.material = Some(copy);
         }
 
         let this = self.to_gd();

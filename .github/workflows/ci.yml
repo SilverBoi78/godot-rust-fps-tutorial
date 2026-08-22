@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  GODOT_VERSION: 4.7.2
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        run: rustup toolchain install stable --profile minimal --component rustfmt,clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: reference/rust
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        run: |
+          curl -sSLO "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q "Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          mkdir -p "$HOME/.local/bin"
+          mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" "$HOME/.local/bin/godot4"
+          chmod +x "$HOME/.local/bin/godot4"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Formatting
+        run: cargo fmt --manifest-path reference/rust/Cargo.toml --check
+
+      - name: Clippy
+        run: cargo clippy --manifest-path reference/rust/Cargo.toml -- -D warnings
+
+      - name: Build
+        run: cargo build --manifest-path reference/rust/Cargo.toml
+
+      # Godot only registers a .gdextension during a filesystem scan, so a fresh
+      # checkout must be imported once before any class exists.
+      - name: Import project
+        run: godot4 --headless --path reference/godot --import
+
+      - name: Headless test suite
+        run: godot4 --headless --path reference/godot res://tests/tests.tscn
+
+      # The project's core guarantee: no code in a lesson was written from
+      # memory. Every snippet must appear verbatim in the verified build.
+      - name: Tutorial snippets match the reference build
+        run: python3 tools/check_snippets.py

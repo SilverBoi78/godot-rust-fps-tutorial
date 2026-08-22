@@ -221,19 +221,37 @@ Flashing a target red means changing its material's colour. But the material is 
 `.tres` file shared by every node that uses it, so this flashes all of them:
 
 ```rust
-        if let Some(active) = self.mesh.get_active_material(0) {
-            if let Ok(std_mat) = active.try_cast::<StandardMaterial3D>() {
-                let copy = std_mat.duplicate_resource();
-                self.mesh.set_surface_override_material(0, &copy);
-                self.head_mesh.set_surface_override_material(0, &copy);
-                self.base_color = copy.get_albedo();
-                self.material = Some(copy);
-            }
+        if let Some(active) = self.mesh.get_active_material(0)
+            && let Ok(std_mat) = active.try_cast::<StandardMaterial3D>()
+        {
+            let copy = std_mat.duplicate_resource();
+            self.mesh.set_surface_override_material(0, &copy);
+            self.head_mesh.set_surface_override_material(0, &copy);
+            self.base_color = copy.get_albedo();
+            self.material = Some(copy);
         }
 ```
 
 `duplicate_resource()` gives this node its own copy. Same trap as `BoxMesh` in
 Lesson 3, and it will catch you a third time in Lesson 12 with 48 enemies.
+
+Note the `&& let` in the condition. That is a **let-chain**: two fallible
+patterns in one `if`, without nesting. The equivalent nested form works
+identically —
+
+<!-- illustrative -->
+```rust
+if let Some(active) = self.mesh.get_active_material(0) {
+    if let Ok(std_mat) = active.try_cast::<StandardMaterial3D>() {
+        // ...
+    }
+}
+```
+
+— and clippy will tell you to collapse it, which is why the reference build is
+written the flat way. You will use this constantly against Godot's API, where
+almost every lookup returns an `Option` or a `Result` and two in a row is the
+normal case.
 
 Note both meshes get the *same* copy, so the head and body flash together.
 
@@ -304,14 +322,14 @@ impl IStaticBody3D for TargetDummy {
         // Duplicate the material so flashing this dummy doesn't flash every
         // other dummy sharing the same resource. Shared-resource surprises like
         // this are a classic Godot gotcha.
-        if let Some(active) = self.mesh.get_active_material(0) {
-            if let Ok(std_mat) = active.try_cast::<StandardMaterial3D>() {
-                let copy = std_mat.duplicate_resource();
-                self.mesh.set_surface_override_material(0, &copy);
-                self.head_mesh.set_surface_override_material(0, &copy);
-                self.base_color = copy.get_albedo();
-                self.material = Some(copy);
-            }
+        if let Some(active) = self.mesh.get_active_material(0)
+            && let Ok(std_mat) = active.try_cast::<StandardMaterial3D>()
+        {
+            let copy = std_mat.duplicate_resource();
+            self.mesh.set_surface_override_material(0, &copy);
+            self.head_mesh.set_surface_override_material(0, &copy);
+            self.base_color = copy.get_albedo();
+            self.material = Some(copy);
         }
 
         let this = self.to_gd();
@@ -420,10 +438,10 @@ In `shoot_ray`, after extracting the hit:
         if let Some(mut health) = find_health(&collider) {
             // Tell the target the hit is coming BEFORE applying damage, so its
             // death handler knows whether the killing blow was a headshot.
-            if let Some(parent) = health.get_parent() {
-                if let Ok(mut enemy) = parent.try_cast::<Enemy>() {
-                    enemy.bind_mut().note_incoming_hit(is_headshot);
-                }
+            if let Some(parent) = health.get_parent()
+                && let Ok(mut enemy) = parent.try_cast::<Enemy>()
+            {
+                enemy.bind_mut().note_incoming_hit(is_headshot);
             }
 
             let multiplier = if is_headshot {
@@ -474,9 +492,11 @@ This project has one, and now is when it starts earning its keep. It is a scene
 with a Rust node that loads the game, drives it, and checks the results:
 
 ```rust
-    let mut intent = PlayerIntent::default();
-    intent.fire_held = true;
-    intent.fire_pressed = true;
+    let intent = PlayerIntent {
+        fire_held: true,
+        fire_pressed: true,
+        ..Default::default()
+    };
     weapon.bind_mut().tick(&intent, 1.0 / 60.0);
     next_physics_frame(&tree).await;
 

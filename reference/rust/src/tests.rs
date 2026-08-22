@@ -171,9 +171,11 @@ async fn player_and_weapon(runner: &Gd<Node>, r: &mut Results) {
     let enemy_health = enemy.bind().health.clone();
     let before = enemy_health.bind().get_current();
 
-    let mut intent = PlayerIntent::default();
-    intent.fire_held = true;
-    intent.fire_pressed = true;
+    let intent = PlayerIntent {
+        fire_held: true,
+        fire_pressed: true,
+        ..Default::default()
+    };
     weapon.bind_mut().tick(&intent, 1.0 / 60.0);
     next_physics_frame(&tree).await;
 
@@ -210,8 +212,10 @@ async fn player_and_weapon(runner: &Gd<Node>, r: &mut Results) {
 
     // Reload cycle.
     let reserve_before = weapon.bind().get_reserve();
-    let mut reload_intent = PlayerIntent::default();
-    reload_intent.reload_pressed = true;
+    let reload_intent = PlayerIntent {
+        reload_pressed: true,
+        ..Default::default()
+    };
     weapon.bind_mut().tick(&reload_intent, 1.0 / 60.0);
     r.check(weapon.bind().is_reloading(), "reload started");
 

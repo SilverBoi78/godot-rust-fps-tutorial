@@ -311,10 +311,10 @@ impl Weapon {
         if let Some(mut health) = find_health(&collider) {
             // Tell the target the hit is coming BEFORE applying damage, so its
             // death handler knows whether the killing blow was a headshot.
-            if let Some(parent) = health.get_parent() {
-                if let Ok(mut enemy) = parent.try_cast::<Enemy>() {
-                    enemy.bind_mut().note_incoming_hit(is_headshot);
-                }
+            if let Some(parent) = health.get_parent()
+                && let Ok(mut enemy) = parent.try_cast::<Enemy>()
+            {
+                enemy.bind_mut().note_incoming_hit(is_headshot);
             }
 
             let multiplier = if is_headshot {

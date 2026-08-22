@@ -347,10 +347,10 @@ Create `rust/src/interactor.rs`. It raycasts on layer 5 and reports what it find
         let mut query = PhysicsRayQueryParameters3D::create(from, to)?;
         query.set_collision_mask(self.interact_mask);
         query.set_collide_with_areas(false);
-        if let Some(body) = self.owner_body.clone() {
-            if let Ok(collider) = body.try_cast::<CollisionObject3D>() {
-                query.set_exclude(&array![collider.get_rid()]);
-            }
+        if let Some(body) = self.owner_body.clone()
+            && let Ok(collider) = body.try_cast::<CollisionObject3D>()
+        {
+            query.set_exclude(&array![collider.get_rid()]);
         }
 
         let hit = camera
@@ -383,15 +383,14 @@ And the tick:
     pub fn tick(&mut self, intent: &PlayerIntent) {
         self.refresh_target();
 
-        if intent.interact_pressed {
-            if let (Some(mut current), Some(player)) =
+        if intent.interact_pressed
+            && let (Some(mut current), Some(player)) =
                 (self.current.clone(), self.owner_body.clone())
-            {
-                current.bind_mut().interact(player);
-                // Re-check straight away: a door that just opened should stop
-                // prompting this frame rather than next.
-                self.refresh_target();
-            }
+        {
+            current.bind_mut().interact(player);
+            // Re-check straight away: a door that just opened should stop
+            // prompting this frame rather than next.
+            self.refresh_target();
         }
     }
 ```
