@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Material" path="res://materials/greybox_wall.tres" id="1_mat"]
+
+[node name="Wall" type="Wall"]
+collision_layer = 1
+collision_mask = 0
+size = Vector3(24, 4, 0.5)
+material = ExtResource("1_mat")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="."]

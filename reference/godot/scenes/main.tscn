@@ -1,0 +1,61 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="1_arena"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="3_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="4_hud"]
+[ext_resource type="Curve" path="res://content/curves/round_count.tres" id="5_count"]
+[ext_resource type="Curve" path="res://content/curves/round_health.tres" id="6_health"]
+[ext_resource type="Curve" path="res://content/curves/round_speed.tres" id="7_speed"]
+[ext_resource type="Curve" path="res://content/curves/round_spawn_interval.tres" id="8_interval"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat_1"]
+sky_top_color = Color(0.16, 0.18, 0.24, 1)
+sky_horizon_color = Color(0.42, 0.38, 0.36, 1)
+ground_bottom_color = Color(0.1, 0.1, 0.11, 1)
+ground_horizon_color = Color(0.42, 0.38, 0.36, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("SkyMat_1")
+
+[sub_resource type="Environment" id="Env_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+ambient_light_source = 3
+ambient_light_color = Color(0.6, 0.62, 0.7, 1)
+ambient_light_sky_contribution = 0.5
+tonemap_mode = 3
+ssao_enabled = true
+
+[node name="Main" type="Main"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env_1")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 12, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Arena" parent="." instance=ExtResource("1_arena")]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 8)
+
+[node name="EnemyPool" type="EnemyPool" parent="."]
+enemy_scene = ExtResource("3_enemy")
+pool_size = 48
+
+[node name="RoundDirector" type="RoundDirector" parent="."]
+count_curve = ExtResource("5_count")
+health_curve = ExtResource("6_health")
+speed_curve = ExtResource("7_speed")
+spawn_interval_curve = ExtResource("8_interval")
+max_round = 30
+max_active = 32
+intermission_seconds = 6.0
+first_round_delay = 3.0
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="HUDLayer" instance=ExtResource("4_hud")]

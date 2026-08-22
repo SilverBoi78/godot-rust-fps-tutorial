@@ -1,0 +1,18 @@
+# Rust
+/reference/rust/target/
+**/target/
+*.pdb
+
+# Godot
+.godot/
+/reference/godot/android/
+export_presets.cfg
+*.translation
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

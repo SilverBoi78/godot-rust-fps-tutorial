@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://materials/greybox_accent.tres" id="1_accent"]
+
+[sub_resource type="BoxMesh" id="BodyMesh_1"]
+size = Vector3(0.09, 0.11, 0.52)
+
+[sub_resource type="BoxMesh" id="BarrelMesh_1"]
+size = Vector3(0.035, 0.035, 0.34)
+
+[sub_resource type="BoxMesh" id="GripMesh_1"]
+size = Vector3(0.07, 0.16, 0.09)
+
+[node name="Weapon" type="Weapon"]
+
+[node name="Viewmodel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, -0.22, -0.42)
+
+[node name="Body" type="MeshInstance3D" parent="Viewmodel"]
+mesh = SubResource("BodyMesh_1")
+surface_material_override/0 = ExtResource("1_accent")
+
+[node name="Barrel" type="MeshInstance3D" parent="Viewmodel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, -0.4)
+mesh = SubResource("BarrelMesh_1")
+
+[node name="Grip" type="MeshInstance3D" parent="Viewmodel"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -0.12, 0.13)
+mesh = SubResource("GripMesh_1")
+
+[node name="Muzzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, -0.205, -0.98)
+
+[node name="Flash" type="OmniLight3D" parent="Muzzle"]
+light_color = Color(1, 0.83, 0.55, 1)
+light_energy = 6.0
+omni_range = 5.0
+
+[node name="Audio" type="AudioStreamPlayer3D" parent="."]
+unit_size = 14.0
+max_db = 0.0

@@ -1,0 +1,13 @@
+# Normalise to LF in the repository. Godot writes LF on every platform, and a
+# mixed-ending repo produces diffs that are entirely whitespace.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ogg binary
+*.wav binary
+*.ttf binary
+*.otf binary
+*.so  binary
+*.dll binary
+*.dylib binary

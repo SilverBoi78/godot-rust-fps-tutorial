@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Material" path="res://materials/greybox_barrier.tres" id="1_mat"]
+
+[sub_resource type="BoxMesh" id="DoorMesh_1"]
+material = ExtResource("1_mat")
+size = Vector3(4, 3.6, 0.35)
+
+[sub_resource type="BoxShape3D" id="DoorShape_1"]
+size = Vector3(4, 3.6, 0.35)
+
+[node name="Door" type="Door"]
+collision_layer = 17
+collision_mask = 0
+
+[node name="Interactable" type="Interactable" parent="."]
+display_name = "Door"
+cost = 750
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+mesh = SubResource("DoorMesh_1")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+shape = SubResource("DoorShape_1")

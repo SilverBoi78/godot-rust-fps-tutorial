@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/weapon.tscn" id="1_weapon"]
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape_1"]
+radius = 0.4
+height = 1.8
+
+[node name="Player" type="Player"]
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("PlayerShape_1")
+
+[node name="InputSource" type="PlayerInputSource" parent="."]
+
+[node name="Interactor" type="Interactor" parent="."]
+
+[node name="Health" type="Health" parent="."]
+max_health = 100.0
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62, 0)
+
+[node name="CameraRig" type="Node3D" parent="Head"]
+
+[node name="Camera3D" type="Camera3D" parent="Head/CameraRig"]
+fov = 78.0
+near = 0.05
+
+[node name="Weapon" parent="Head/CameraRig/Camera3D" instance=ExtResource("1_weapon")]

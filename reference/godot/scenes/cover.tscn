@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Material" path="res://materials/greybox_cover.tres" id="1_cover"]
+
+[sub_resource type="BoxMesh" id="MeshCover_1"]
+material = ExtResource("1_cover")
+size = Vector3(2, 1.2, 2)
+
+[sub_resource type="BoxShape3D" id="ShapeCover_1"]
+size = Vector3(2, 1.2, 2)
+
+[node name="Cover" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("MeshCover_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("ShapeCover_1")

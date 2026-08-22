@@ -1,0 +1,157 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/wall.tscn" id="1_wall"]
+[ext_resource type="PackedScene" path="res://scenes/cover.tscn" id="2_cover"]
+[ext_resource type="Material" path="res://materials/greybox_floor.tres" id="3_floor"]
+[ext_resource type="Material" path="res://materials/greybox_accent.tres" id="4_accent"]
+[ext_resource type="PackedScene" path="res://scenes/door.tscn" id="7_door"]
+[ext_resource type="PackedScene" path="res://scenes/wall_buy.tscn" id="8_wallbuy"]
+
+[sub_resource type="NavigationMesh" id="NavMesh_1"]
+vertices = PackedVector3Array()
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+cell_size = 0.25
+cell_height = 0.25
+agent_height = 1.75
+agent_radius = 0.5
+agent_max_climb = 0.5
+
+[sub_resource type="BoxMesh" id="MeshFloorMain_1"]
+material = ExtResource("3_floor")
+size = Vector3(24, 0.5, 24)
+
+[sub_resource type="BoxShape3D" id="ShapeFloorMain_1"]
+size = Vector3(24, 0.5, 24)
+
+[sub_resource type="BoxMesh" id="MeshPlatform_1"]
+material = ExtResource("4_accent")
+size = Vector3(7, 1, 7)
+
+[sub_resource type="BoxShape3D" id="ShapePlatform_1"]
+size = Vector3(7, 1, 7)
+
+[sub_resource type="BoxMesh" id="MeshFloorYard_1"]
+material = ExtResource("3_floor")
+size = Vector3(16, 0.5, 16)
+
+[sub_resource type="BoxShape3D" id="ShapeFloorYard_1"]
+size = Vector3(16, 0.5, 16)
+
+[node name="Arena" type="Node3D"]
+
+[node name="NavRegion" type="Arena" parent="."]
+navigation_mesh = SubResource("NavMesh_1")
+
+[node name="ZoneStart" type="Zone" parent="NavRegion"]
+zone_name = "Start"
+open_at_start = true
+
+[node name="Floor" type="StaticBody3D" parent="NavRegion/ZoneStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavRegion/ZoneStart/Floor"]
+mesh = SubResource("MeshFloorMain_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavRegion/ZoneStart/Floor"]
+shape = SubResource("ShapeFloorMain_1")
+
+[node name="WallSouth" parent="NavRegion/ZoneStart" instance=ExtResource("1_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="WallEast" parent="NavRegion/ZoneStart" instance=ExtResource("1_wall")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12, 0, 0)
+
+[node name="WallWest" parent="NavRegion/ZoneStart" instance=ExtResource("1_wall")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -12, 0, 0)
+
+[node name="WallNorthLeft" parent="NavRegion/ZoneStart" instance=ExtResource("1_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -12)
+size = Vector3(10, 4, 0.5)
+
+[node name="WallNorthRight" parent="NavRegion/ZoneStart" instance=ExtResource("1_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -12)
+size = Vector3(10, 4, 0.5)
+
+[node name="Platform" type="StaticBody3D" parent="NavRegion/ZoneStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.5, -7.5)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavRegion/ZoneStart/Platform"]
+mesh = SubResource("MeshPlatform_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavRegion/ZoneStart/Platform"]
+shape = SubResource("ShapePlatform_1")
+
+[node name="CoverA" parent="NavRegion/ZoneStart" instance=ExtResource("2_cover")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -3)
+
+[node name="CoverB" parent="NavRegion/ZoneStart" instance=ExtResource("2_cover")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -4, 0, 4)
+
+[node name="CoverC" parent="NavRegion/ZoneStart" instance=ExtResource("2_cover")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 7)
+
+[node name="CoverD" parent="NavRegion/ZoneStart" instance=ExtResource("2_cover")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.5, 0, -8)
+
+[node name="WallBuy" parent="NavRegion/ZoneStart" instance=ExtResource("8_wallbuy")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 11.6, 0, 3)
+
+[node name="SpawnPoints" type="Node3D" parent="NavRegion/ZoneStart"]
+
+[node name="Spawn1" type="Marker3D" parent="NavRegion/ZoneStart/SpawnPoints" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.2, 10)
+
+[node name="Spawn2" type="Marker3D" parent="NavRegion/ZoneStart/SpawnPoints" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.2, 10)
+
+[node name="Spawn3" type="Marker3D" parent="NavRegion/ZoneStart/SpawnPoints" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0.2, -2)
+
+[node name="ZoneYard" type="Zone" parent="NavRegion"]
+zone_name = "Yard"
+
+[node name="Floor" type="StaticBody3D" parent="NavRegion/ZoneYard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -20)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavRegion/ZoneYard/Floor"]
+mesh = SubResource("MeshFloorYard_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavRegion/ZoneYard/Floor"]
+shape = SubResource("ShapeFloorYard_1")
+
+[node name="WallNorth" parent="NavRegion/ZoneYard" instance=ExtResource("1_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+size = Vector3(16, 4, 0.5)
+
+[node name="WallEast" parent="NavRegion/ZoneYard" instance=ExtResource("1_wall")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 8, 0, -20)
+size = Vector3(16, 4, 0.5)
+
+[node name="WallWest" parent="NavRegion/ZoneYard" instance=ExtResource("1_wall")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -8, 0, -20)
+size = Vector3(16, 4, 0.5)
+
+[node name="CoverE" parent="NavRegion/ZoneYard" instance=ExtResource("2_cover")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -22)
+
+[node name="CoverF" parent="NavRegion/ZoneYard" instance=ExtResource("2_cover")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 4.5, 0, -17)
+
+[node name="SpawnPoints" type="Node3D" parent="NavRegion/ZoneYard"]
+
+[node name="Spawn1" type="Marker3D" parent="NavRegion/ZoneYard/SpawnPoints" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.2, -26)
+
+[node name="Spawn2" type="Marker3D" parent="NavRegion/ZoneYard/SpawnPoints" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.2, -26)
+
+[node name="Door" parent="NavRegion" instance=ExtResource("7_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+zone_path = NodePath("../ZoneYard")
