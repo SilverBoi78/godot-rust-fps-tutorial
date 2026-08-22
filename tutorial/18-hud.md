@@ -468,7 +468,7 @@ That is the prototype. You have:
 - pooled enemies that path around cover and telegraph their attacks
 - rounds that escalate on curves you can draw
 - an economy, two interactables, and a HUD
-- 48 headless checks proving it all still works
+- 52 headless checks proving it all still works
 
 And, more to the point, you have the vocabulary to add the next thing without a
 tutorial: a second weapon, a new enemy, a boss round, a menu.

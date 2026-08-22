@@ -170,7 +170,7 @@ If you're asking someone for help, the useful things to give them are:
 ## Verifying your build
 
 ```bash
-# The reference build's own test suite -- 48 checks, no window needed
+# The reference build's own test suite -- 52 checks, no window needed
 godot4 --headless --path reference/godot res://tests/tests.tscn
 ```
 

@@ -49,7 +49,7 @@ godot4 --headless --path reference/godot --import
 # 3. Play it
 godot4 --path reference/godot
 
-# The test suite -- 48 checks, no window needed
+# The test suite -- 52 checks, no window needed
 godot4 --headless --path reference/godot res://tests/tests.tscn
 ```
 

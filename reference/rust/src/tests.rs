@@ -19,7 +19,7 @@ use crate::game_state::GameState;
 use crate::interactable::Interactable;
 use crate::player::Player;
 use crate::player_intent::PlayerIntent;
-use crate::round_director::RoundDirector;
+use crate::round_director::{Phase, RoundDirector};
 use crate::zone::Zone;
 
 #[derive(GodotClass)]
@@ -95,6 +95,7 @@ async fn run_all(runner: Gd<Node>) {
 
     player_and_weapon(&runner, &mut results).await;
     loop_systems(&runner, &mut results).await;
+    round_loop(&runner, &mut results).await;
 
     godot_print!("");
     let mut tree = runner.get_tree();
@@ -447,6 +448,50 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
             .bind()
             .can_interact(player.clone().upcast::<Node3D>()),
         "wall buy is reusable",
+    );
+
+    scene.queue_free();
+    next_process_frame(&tree).await;
+}
+
+// ================================================================ round loop
+
+/// The only check that exercises the game as a whole: load `main.tscn`, let it
+/// run, and confirm a round actually starts and puts enemies on the field.
+///
+/// Everything else here tests a system in isolation. This one would catch the
+/// class of bug where every part works and the wiring between them does not.
+async fn round_loop(runner: &Gd<Node>, r: &mut Results) {
+    godot_print!("\n-- the round loop --");
+    let mut scene = load_main(runner).await;
+    let tree = runner.get_tree();
+
+    let director = scene.get_node_as::<RoundDirector>("RoundDirector");
+    let pool = scene.get_node_as::<EnemyPool>("EnemyPool");
+
+    r.check(
+        director.bind().get_phase() == Phase::Intermission,
+        "director starts in the pre-round intermission",
+    );
+
+    // `first_round_delay` is 3s; give it four at 60 Hz plus a margin.
+    let mut spawned = false;
+    for _ in 0..260 {
+        next_physics_frame(&tree).await;
+        if pool.bind().active_count() > 0 {
+            spawned = true;
+            break;
+        }
+    }
+
+    r.check(spawned, "round 1 started and spawned enemies unprompted");
+    r.check(
+        GameState::singleton().bind().round_number == 1,
+        "round number advanced to 1",
+    );
+    r.check(
+        director.bind().get_alive() > 0,
+        "director is tracking live enemies",
     );
 
     scene.queue_free();

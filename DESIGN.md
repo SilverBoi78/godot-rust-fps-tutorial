@@ -152,10 +152,11 @@ Windows, macOS and Linux. The rules that keep it that way:
 
 ## Verification
 
-`reference/` has a headless test suite — 48 checks covering the player, the
+`reference/` has a headless test suite — 52 checks covering the player, the
 weapon's hitscan and reload cycle, headshot registration through an `Area3D`,
-navigation baking and rebaking, pooling and recycling, the economy, and both
-interactables.
+navigation baking and rebaking, pooling and recycling, the economy, both
+interactables, and one end-to-end check that loads the real main scene and
+confirms a round starts and spawns unprompted.
 
 Every code snippet in the tutorial is copied out of `reference/` **after** that
 suite passes. Nothing in the lessons is written from memory.
