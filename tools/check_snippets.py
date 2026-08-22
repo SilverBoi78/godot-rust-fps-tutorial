@@ -12,8 +12,11 @@ import re, sys, pathlib
 REPO = pathlib.Path(__file__).resolve().parent.parent
 SRC = REPO / "reference/rust/src"
 
+# Compare on fully left-stripped lines. Lessons often quote a method body
+# dedented out of its `impl` block, and the indentation level is not what we are
+# trying to guarantee -- the tokens, and their order, are.
 blob = "\n".join(f.read_text() for f in sorted(SRC.rglob("*.rs")))
-blobc = "\n".join(l.rstrip() for l in blob.splitlines() if l.strip())
+blobc = "\n".join(l.strip() for l in blob.splitlines() if l.strip())
 
 fence = re.compile(r"(?:(<!-- illustrative -->)\n)?```rust\n(.*?)```", re.S)
 
@@ -30,7 +33,7 @@ for md in sorted((REPO / "tutorial").glob("*.md")):
             exempt += 1
             continue
         checked += 1
-        compact = "\n".join(l.rstrip() for l in code.splitlines() if l.strip())
+        compact = "\n".join(l.strip() for l in code.splitlines() if l.strip())
         if compact not in blobc:
             missing.append((md.name, lines[0][:66], len(lines)))
 

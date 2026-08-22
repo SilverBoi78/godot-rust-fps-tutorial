@@ -12,7 +12,7 @@ SRC = REPO / "reference/rust/src"
 files = {f: f.read_text().splitlines() for f in sorted(SRC.rglob("*.rs"))}
 
 def compact(lines):
-    return [l.rstrip() for l in lines if l.strip()]
+    return [l.strip() for l in lines if l.strip()]
 
 def find_slice(block):
     """Find the reference file this snippet came from, then return the exact
@@ -29,7 +29,7 @@ def find_slice(block):
 
     best, best_score = None, 0
     for path, lines in files.items():
-        present = {l.rstrip() for l in lines}
+        present = {l.strip() for l in lines}
         score = sum(1 for l in want if l in present)
         if score > best_score:
             best, best_score = path, score
@@ -37,13 +37,13 @@ def find_slice(block):
         return None
 
     lines = files[best]
-    present = {l.rstrip(): None for l in lines}
+    present = {l.strip(): None for l in lines}
     anchors = [l for l in want if l in present]
     if not anchors:
         return None
 
-    first = next(i for i, l in enumerate(lines) if l.rstrip() == anchors[0])
-    last = max(i for i, l in enumerate(lines) if l.rstrip() == anchors[-1])
+    first = next(i for i, l in enumerate(lines) if l.strip() == anchors[0])
+    last = max(i for i, l in enumerate(lines) if l.strip() == anchors[-1])
 
     # Attributes are short, so the anchor filter drops them; walk back over any
     # `#[...]` lines directly above the anchor so `#[godot_api]` is not lost.
