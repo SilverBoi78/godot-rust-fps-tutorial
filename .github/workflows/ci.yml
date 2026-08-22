@@ -42,8 +42,17 @@ jobs:
 
       # Godot only registers a .gdextension during a filesystem scan, so a fresh
       # checkout must be imported once before any class exists.
+      #
+      # The headless editor completes the scan and then aborts (SIGABRT) while
+      # shutting down on CI runners, so the exit code is not trustworthy here.
+      # We ignore it and assert on the artifact the scan is supposed to produce
+      # instead -- extension_list.cfg only exists once the extension has been
+      # discovered and registered.
       - name: Import project
-        run: godot4 --headless --path reference/godot --import
+        run: |
+          godot4 --headless --path reference/godot --import || true
+          test -f reference/godot/.godot/extension_list.cfg
+          grep -q 'shooter.gdextension' reference/godot/.godot/extension_list.cfg
 
       - name: Headless test suite
         run: godot4 --headless --path reference/godot res://tests/tests.tscn
