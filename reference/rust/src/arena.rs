@@ -30,7 +30,10 @@ pub struct Arena {
 #[godot_api]
 impl INavigationRegion3D for Arena {
     fn ready(&mut self) {
-        self.base_mut().bake_navigation_mesh_ex().on_thread(false).done();
+        self.base_mut()
+            .bake_navigation_mesh_ex()
+            .on_thread(false)
+            .done();
 
         let this = self.to_gd();
         EventBus::singleton()
@@ -52,7 +55,10 @@ impl Arena {
         // is a blip, and it avoids agents querying a half-built mesh. Bake on a
         // thread for a large map, and accept a moment where the old mesh is
         // still in use.
-        self.base_mut().bake_navigation_mesh_ex().on_thread(false).done();
+        self.base_mut()
+            .bake_navigation_mesh_ex()
+            .on_thread(false)
+            .done();
     }
 }
 
@@ -60,10 +66,7 @@ impl Arena {
     fn on_zone_opened(&mut self, _zone_name: GString) {
         let delay = self.rebake_delay;
         let callback = Callable::from_object_method(&self.to_gd(), "rebake");
-        let mut timer: Gd<SceneTreeTimer> = self
-            .base()
-            .get_tree()
-            .create_timer(delay);
+        let mut timer: Gd<SceneTreeTimer> = self.base().get_tree().create_timer(delay);
         timer.connect("timeout", &callback);
     }
 }

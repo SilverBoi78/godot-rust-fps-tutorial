@@ -77,8 +77,7 @@ impl EnemyPool {
         let this = self.to_gd();
 
         for i in 0..self.pool_size {
-            let mut enemy = scene
-                .instantiate_as::<Enemy>();
+            let mut enemy = scene.instantiate_as::<Enemy>();
             enemy.set_name(&format!("Enemy{i:02}"));
 
             self.base_mut().add_child(&enemy);

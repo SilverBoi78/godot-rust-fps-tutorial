@@ -10,7 +10,9 @@
 //! resize all of them -- the same shared-resource trap as the enemy material.
 //! Creating fresh resources per instance sidesteps it entirely.
 
-use godot::classes::{BoxMesh, BoxShape3D, CollisionShape3D, IStaticBody3D, Material, MeshInstance3D, StaticBody3D};
+use godot::classes::{
+    BoxMesh, BoxShape3D, CollisionShape3D, IStaticBody3D, Material, MeshInstance3D, StaticBody3D,
+};
 use godot::prelude::*;
 
 #[derive(GodotClass)]

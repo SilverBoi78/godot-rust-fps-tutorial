@@ -51,13 +51,27 @@ impl IControl for Hud {
         // One `signals()` call per signal. The handle it returns configures a
         // single signal at a time, so holding one in a variable and reusing it
         // for seven connections panics at runtime -- it compiles perfectly well.
-        bus.signals().points_changed().connect_other(&this, Hud::on_points_changed);
-        bus.signals().round_started().connect_other(&this, Hud::on_round_started);
-        bus.signals().round_cleared().connect_other(&this, Hud::on_round_cleared);
-        bus.signals().enemies_remaining_changed().connect_other(&this, Hud::on_remaining_changed);
-        bus.signals().player_damaged().connect_other(&this, Hud::on_player_damaged);
-        bus.signals().interact_target_changed().connect_other(&this, Hud::on_interact_target_changed);
-        bus.signals().purchase_failed().connect_other(&this, Hud::on_purchase_failed);
+        bus.signals()
+            .points_changed()
+            .connect_other(&this, Hud::on_points_changed);
+        bus.signals()
+            .round_started()
+            .connect_other(&this, Hud::on_round_started);
+        bus.signals()
+            .round_cleared()
+            .connect_other(&this, Hud::on_round_cleared);
+        bus.signals()
+            .enemies_remaining_changed()
+            .connect_other(&this, Hud::on_remaining_changed);
+        bus.signals()
+            .player_damaged()
+            .connect_other(&this, Hud::on_player_damaged);
+        bus.signals()
+            .interact_target_changed()
+            .connect_other(&this, Hud::on_interact_target_changed);
+        bus.signals()
+            .purchase_failed()
+            .connect_other(&this, Hud::on_purchase_failed);
 
         self.prompt_label.set_text("");
         let mut modulate = self.banner.get_modulate();
@@ -75,9 +89,18 @@ impl Hud {
     /// wire-up is clearer than routing weapon ammo through the global bus.
     pub fn bind_weapon(&mut self, weapon: Gd<Weapon>) {
         let this = self.to_gd();
-        weapon.signals().ammo_changed().connect_other(&this, Hud::on_ammo_changed);
-        weapon.signals().reload_started().connect_other(&this, Hud::on_reload_started);
-        weapon.signals().hit_confirmed().connect_other(&this, Hud::on_hit_confirmed);
+        weapon
+            .signals()
+            .ammo_changed()
+            .connect_other(&this, Hud::on_ammo_changed);
+        weapon
+            .signals()
+            .reload_started()
+            .connect_other(&this, Hud::on_reload_started);
+        weapon
+            .signals()
+            .hit_confirmed()
+            .connect_other(&this, Hud::on_hit_confirmed);
 
         let (mag, reserve) = {
             let weapon = weapon.bind();
@@ -88,7 +111,10 @@ impl Hud {
 
     pub fn bind_health(&mut self, health: Gd<Health>) {
         let this = self.to_gd();
-        health.signals().changed().connect_other(&this, Hud::on_health_changed);
+        health
+            .signals()
+            .changed()
+            .connect_other(&this, Hud::on_health_changed);
 
         let (current, max) = {
             let health = health.bind();
@@ -102,7 +128,8 @@ impl Hud {
     fn on_health_changed(&mut self, current: f32, maximum: f32) {
         self.health_bar.set_max(maximum as f64);
         self.health_bar.set_value(current as f64);
-        self.health_label.set_text(&format!("{}", current.round() as i32));
+        self.health_label
+            .set_text(&format!("{}", current.round() as i32));
     }
 
     fn on_player_damaged(&mut self, _amount: f32, _current: f32, _maximum: f32) {
@@ -115,7 +142,8 @@ impl Hud {
     }
 
     fn on_ammo_changed(&mut self, in_magazine: i32, reserve: i32) {
-        self.ammo_label.set_text(&format!("{in_magazine} / {reserve}"));
+        self.ammo_label
+            .set_text(&format!("{in_magazine} / {reserve}"));
     }
 
     fn on_reload_started(&mut self, _seconds: f32) {
@@ -151,7 +179,10 @@ impl Hud {
 
     fn on_round_started(&mut self, round_number: i32, enemy_count: i32) {
         self.round_label.set_text(&format!("ROUND {round_number}"));
-        self.show_banner(&format!("ROUND {round_number}  —  {enemy_count} INCOMING"), 1.6);
+        self.show_banner(
+            &format!("ROUND {round_number}  —  {enemy_count} INCOMING"),
+            1.6,
+        );
     }
 
     fn on_round_cleared(&mut self, round_number: i32) {
@@ -164,7 +195,11 @@ impl Hud {
 
     fn on_interact_target_changed(&mut self, prompt: GString, affordable: bool) {
         self.prompt_label.set_text(&prompt);
-        let colour = if affordable { AFFORDABLE } else { TOO_EXPENSIVE };
+        let colour = if affordable {
+            AFFORDABLE
+        } else {
+            TOO_EXPENSIVE
+        };
         self.prompt_label.set_modulate(colour);
     }
 

@@ -9,8 +9,8 @@
 //! That works because everything a zone needs to know is structural: its
 //! contents are its children.
 
-use godot::classes::node::ProcessMode;
 use godot::classes::CollisionObject3D;
+use godot::classes::node::ProcessMode;
 use godot::prelude::*;
 
 use crate::event_bus::EventBus;

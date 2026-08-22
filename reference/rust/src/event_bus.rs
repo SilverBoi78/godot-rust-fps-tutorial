@@ -28,7 +28,12 @@ pub struct EventBus {
 impl EventBus {
     // --- combat ---------------------------------------------------------
     #[signal]
-    pub fn enemy_damaged(enemy: Gd<Node3D>, amount: f32, is_headshot: bool, source: Option<Gd<Node>>);
+    pub fn enemy_damaged(
+        enemy: Gd<Node3D>,
+        amount: f32,
+        is_headshot: bool,
+        source: Option<Gd<Node>>,
+    );
     #[signal]
     pub fn enemy_died(enemy: Gd<Node3D>, killer: Option<Gd<Node>>);
     #[signal]

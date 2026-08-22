@@ -56,7 +56,9 @@ impl Interactable {
     #[func]
     pub fn get_prompt(&self) -> GString {
         if self.cost > 0 {
-            format!("{}  [{}]", self.display_name, self.cost).as_str().into()
+            format!("{}  [{}]", self.display_name, self.cost)
+                .as_str()
+                .into()
         } else {
             self.display_name.clone()
         }

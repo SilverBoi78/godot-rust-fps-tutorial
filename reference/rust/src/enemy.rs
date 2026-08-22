@@ -4,12 +4,12 @@
 //! dormant and come back clean, so all of its mutable state is reset in
 //! `activate` rather than assumed fresh from `ready`.
 
+use godot::classes::node::ProcessMode;
+use godot::classes::tween::{EaseType, TransitionType};
 use godot::classes::{
     Area3D, CharacterBody3D, CollisionShape3D, ICharacterBody3D, MeshInstance3D, NavigationAgent3D,
     StandardMaterial3D, Tween,
 };
-use godot::classes::node::ProcessMode;
-use godot::classes::tween::{EaseType, TransitionType};
 use godot::prelude::*;
 
 use crate::event_bus::EventBus;
@@ -381,10 +381,12 @@ impl Enemy {
 
         let this = self.to_gd().upcast::<Node3D>();
         let headshot = self.last_hit_was_headshot;
-        EventBus::singleton()
-            .signals()
-            .enemy_damaged()
-            .emit(&this, amount, headshot, source.as_ref());
+        EventBus::singleton().signals().enemy_damaged().emit(
+            &this,
+            amount,
+            headshot,
+            source.as_ref(),
+        );
 
         GameState::singleton()
             .bind_mut()

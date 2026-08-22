@@ -1,7 +1,7 @@
 //! First-person controller. Reads a `PlayerIntent` -- never `Input` directly.
 
-use godot::classes::{Camera3D, CharacterBody3D, ICharacterBody3D, Input, Node3D};
 use godot::classes::input::MouseMode;
+use godot::classes::{Camera3D, CharacterBody3D, ICharacterBody3D, Input, Node3D};
 use godot::prelude::*;
 
 use crate::event_bus::EventBus;
@@ -9,7 +9,7 @@ use crate::health::Health;
 use crate::interactor::Interactor;
 use crate::player_input::PlayerInputSource;
 use crate::player_intent::PlayerIntent;
-use crate::weapon::{smooth, Weapon};
+use crate::weapon::{Weapon, smooth};
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D, init)]
@@ -235,7 +235,12 @@ impl Player {
         let velocity = self.base().get_velocity();
         let planar_speed = Vector2::new(velocity.x, velocity.z).length();
         let sprinting = intent.sprint_held && planar_speed > 1.5;
-        let target = self.base_fov + if sprinting { self.sprint_fov_bonus } else { 0.0 };
+        let target = self.base_fov
+            + if sprinting {
+                self.sprint_fov_bonus
+            } else {
+                0.0
+            };
         let fov = smooth(self.camera.get_fov(), target, self.fov_response, delta);
         self.camera.set_fov(fov);
     }

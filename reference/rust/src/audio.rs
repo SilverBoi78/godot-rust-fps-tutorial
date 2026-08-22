@@ -14,8 +14,8 @@
 //! Rust functions that happen to return an engine type. Not everything needs
 //! to be a node.
 
-use godot::classes::audio_stream_wav::Format;
 use godot::classes::AudioStreamWav;
+use godot::classes::audio_stream_wav::Format;
 use godot::prelude::*;
 
 const SAMPLE_RATE: u32 = 22050;

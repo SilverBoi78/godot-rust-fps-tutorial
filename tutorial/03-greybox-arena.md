@@ -186,7 +186,9 @@ single label.
 Create `rust/src/wall.rs`:
 
 ```rust
-use godot::classes::{BoxMesh, BoxShape3D, CollisionShape3D, IStaticBody3D, Material, MeshInstance3D, StaticBody3D};
+use godot::classes::{
+    BoxMesh, BoxShape3D, CollisionShape3D, IStaticBody3D, Material, MeshInstance3D, StaticBody3D,
+};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -263,8 +265,6 @@ impl Wall {
         let lift = Vector3::new(0.0, self.size.y * 0.5, 0.0);
         mesh_node.set_position(lift);
         shape_node.set_position(lift);
-    }
-}
 ```
 
 Add `pub mod wall;` to `lib.rs` and build.

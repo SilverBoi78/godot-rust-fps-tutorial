@@ -291,7 +291,10 @@ impl Weapon {
             return;
         }
 
-        let Some(collider) = hit.get("collider").and_then(|v| v.try_to::<Gd<Node>>().ok()) else {
+        let Some(collider) = hit
+            .get("collider")
+            .and_then(|v| v.try_to::<Gd<Node>>().ok())
+        else {
             return;
         };
         let point = hit

@@ -74,7 +74,9 @@ impl Health {
         self.current = (self.current - amount).max(0.0);
 
         let (current, max) = (self.current, self.max_health);
-        self.signals().damaged().emit(amount, current, source.as_ref());
+        self.signals()
+            .damaged()
+            .emit(amount, current, source.as_ref());
         self.signals().changed().emit(current, max);
 
         if self.current <= 0.0 {

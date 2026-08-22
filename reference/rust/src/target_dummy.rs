@@ -53,9 +53,18 @@ impl IStaticBody3D for TargetDummy {
         }
 
         let this = self.to_gd();
-        self.health.signals().damaged().connect_other(&this, TargetDummy::on_damaged);
-        self.health.signals().died().connect_other(&this, TargetDummy::on_died);
-        self.health.signals().changed().connect_other(&this, TargetDummy::on_changed);
+        self.health
+            .signals()
+            .damaged()
+            .connect_other(&this, TargetDummy::on_damaged);
+        self.health
+            .signals()
+            .died()
+            .connect_other(&this, TargetDummy::on_died);
+        self.health
+            .signals()
+            .changed()
+            .connect_other(&this, TargetDummy::on_changed);
     }
 }
 

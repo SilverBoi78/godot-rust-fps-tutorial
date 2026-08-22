@@ -254,7 +254,12 @@ impl ICharacterBody3D for Lesson05Player {
         self.camera_rig.set_position(position);
 
         let sprinting = Input::singleton().is_action_pressed("sprint") && planar_speed > 1.5;
-        let fov_target = self.base_fov + if sprinting { self.sprint_fov_bonus } else { 0.0 };
+        let fov_target = self.base_fov
+            + if sprinting {
+                self.sprint_fov_bonus
+            } else {
+                0.0
+            };
         let fov = smooth(self.camera.get_fov(), fov_target, self.fov_response, delta);
         self.camera.set_fov(fov);
     }
@@ -300,8 +305,6 @@ impl ICharacterBody3D for Lesson05Player {
 
         self.base_mut().set_velocity(velocity);
         self.base_mut().move_and_slide();
-    }
-}
 ```
 
 `move_toward` and `smooth` are two small free functions. Put `move_toward` at the

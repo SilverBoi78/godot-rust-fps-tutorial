@@ -4,7 +4,9 @@
 //! intended order: feel the coupling first, then remove it.
 
 use godot::classes::input::MouseMode;
-use godot::classes::{CharacterBody3D, ICharacterBody3D, Input, InputEvent, InputEventMouseMotion, Node3D};
+use godot::classes::{
+    CharacterBody3D, ICharacterBody3D, Input, InputEvent, InputEventMouseMotion, Node3D,
+};
 use godot::prelude::*;
 
 #[derive(GodotClass)]

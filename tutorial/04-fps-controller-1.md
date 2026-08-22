@@ -243,7 +243,9 @@ stage at `reference/rust/src/stages/lesson04_player.rs` to diff against.
 
 ```rust
 use godot::classes::input::MouseMode;
-use godot::classes::{CharacterBody3D, ICharacterBody3D, Input, InputEvent, InputEventMouseMotion, Node3D};
+use godot::classes::{
+    CharacterBody3D, ICharacterBody3D, Input, InputEvent, InputEventMouseMotion, Node3D,
+};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -325,8 +327,6 @@ impl ICharacterBody3D for Lesson04Player {
 
         self.base_mut().set_velocity(velocity);
         self.base_mut().move_and_slide();
-    }
-}
 ```
 
 Add `pub mod player;` to `lib.rs` and build.

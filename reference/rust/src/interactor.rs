@@ -8,7 +8,7 @@ use godot::prelude::*;
 
 use crate::event_bus::EventBus;
 use crate::game_state::GameState;
-use crate::interactable::{find_interactable, Interactable};
+use crate::interactable::{Interactable, find_interactable};
 use crate::player_intent::PlayerIntent;
 
 #[derive(GodotClass)]

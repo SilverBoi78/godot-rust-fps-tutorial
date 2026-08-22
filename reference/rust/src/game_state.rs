@@ -10,7 +10,7 @@
 
 use godot::prelude::*;
 
-use crate::event_bus::{autoload, EventBus};
+use crate::event_bus::{EventBus, autoload};
 
 #[derive(GodotClass)]
 #[class(base=Node, init)]
@@ -75,8 +75,14 @@ impl GameState {
             return;
         }
         self.points += amount;
-        EventBus::singleton().signals().points_awarded().emit(amount, &reason);
-        EventBus::singleton().signals().points_changed().emit(self.points);
+        EventBus::singleton()
+            .signals()
+            .points_awarded()
+            .emit(amount, &reason);
+        EventBus::singleton()
+            .signals()
+            .points_changed()
+            .emit(self.points);
     }
 
     /// Returns whether the purchase went through. This one DOES return a value,

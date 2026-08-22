@@ -43,10 +43,8 @@ impl IStaticBody3D for WallBuy {
             let mut interactable = self.interactable.bind_mut();
             interactable.display_name = format!("Buy {name} ammo").as_str().into();
             interactable.cost = cost;
-            interactable.set_availability_check(Callable::from_object_method(
-                &this,
-                "player_needs_ammo",
-            ));
+            interactable
+                .set_availability_check(Callable::from_object_method(&this, "player_needs_ammo"));
         }
         self.interactable
             .signals()

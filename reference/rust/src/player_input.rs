@@ -4,8 +4,8 @@
 //! Swap this node for a network input source or an AI one later and the player
 //! works unchanged -- that is the entire point.
 
-use godot::classes::{Input, InputEvent, InputEventMouseMotion};
 use godot::classes::input::MouseMode;
+use godot::classes::{Input, InputEvent, InputEventMouseMotion};
 use godot::prelude::*;
 
 use crate::player_intent::PlayerIntent;

@@ -150,8 +150,14 @@ impl RoundDirector {
         self.spawn_timer = 0.0;
         self.phase = Phase::Spawning;
 
-        EventBus::singleton().signals().round_started().emit(round_number, self.to_spawn);
-        EventBus::singleton().signals().enemies_remaining_changed().emit(self.alive);
+        EventBus::singleton()
+            .signals()
+            .round_started()
+            .emit(round_number, self.to_spawn);
+        EventBus::singleton()
+            .signals()
+            .enemies_remaining_changed()
+            .emit(self.alive);
     }
 
     fn tick_spawning(&mut self, delta: f64) {
@@ -204,7 +210,10 @@ impl RoundDirector {
 
     fn clear_round(&mut self) {
         let round_number = GameState::singleton().bind().round_number;
-        EventBus::singleton().signals().round_cleared().emit(round_number);
+        EventBus::singleton()
+            .signals()
+            .round_cleared()
+            .emit(round_number);
         self.phase = Phase::Intermission;
         self.phase_timer = self.intermission_seconds;
     }

@@ -149,14 +149,12 @@ async fn player_and_weapon(runner: &Gd<Node>, r: &mut Results) {
 
     // Park an enemy in front of the player and shoot it, through the real path.
     let mut pool = scene.get_node_as::<EnemyPool>("EnemyPool");
-    let enemy = pool
-        .bind_mut()
-        .spawn(
-            Vector3::new(-3.0, 0.1, -6.0),
-            player.clone().upcast::<Node3D>(),
-            1.0,
-            1.0,
-        );
+    let enemy = pool.bind_mut().spawn(
+        Vector3::new(-3.0, 0.1, -6.0),
+        player.clone().upcast::<Node3D>(),
+        1.0,
+        1.0,
+    );
     r.check(enemy.is_some(), "spawned a target to shoot");
     let Some(enemy) = enemy else {
         scene.queue_free();
@@ -262,7 +260,10 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
     let mut wall_buy =
         scene.get_node_as::<Interactable>("Arena/NavRegion/ZoneStart/WallBuy/Interactable");
 
-    r.check(pool.bind().available_count() == 48, "48 enemies pre-instantiated");
+    r.check(
+        pool.bind().available_count() == 48,
+        "48 enemies pre-instantiated",
+    );
     r.check(pool.bind().active_count() == 0, "pool starts empty");
 
     // --- navigation ---
@@ -281,12 +282,18 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
         Vector3::new(-10.0, 0.0, -2.0),
         true,
     );
-    r.check(inside.len() >= 2, "navmesh baked: path exists inside the start zone");
+    r.check(
+        inside.len() >= 2,
+        "navmesh baked: path exists inside the start zone",
+    );
 
     let blocked =
         NavigationServer3D::singleton().map_get_path(nav_map, start_point, yard_point, true);
     let reaches = reaches_target(&blocked, yard_point);
-    r.check(!reaches, "closed zone is unreachable before the door is bought");
+    r.check(
+        !reaches,
+        "closed zone is unreachable before the door is bought",
+    );
 
     // --- economy ---
     let mut state = GameState::singleton();
@@ -296,7 +303,10 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
     r.check(state.bind().points == 500, "points awarded");
     r.check(!state.bind_mut().try_spend(9999), "cannot overspend");
     r.check(state.bind().points == 500, "failed purchase costs nothing");
-    r.check(state.bind_mut().try_spend(200), "affordable purchase succeeds");
+    r.check(
+        state.bind_mut().try_spend(200),
+        "affordable purchase succeeds",
+    );
     r.check(state.bind().points == 300, "points deducted");
 
     // --- pooled enemy pathing ---
@@ -311,7 +321,10 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
         scene.queue_free();
         return;
     };
-    r.check(pool.bind().active_count() == 1, "active count tracks spawns");
+    r.check(
+        pool.bind().active_count() == 1,
+        "active count tracks spawns",
+    );
     r.check(
         enemy.is_visible() && enemy.bind().is_active(),
         "spawned enemy is active and visible",
@@ -353,7 +366,10 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
         next_physics_frame(&tree).await;
         waited += 1.0 / 60.0;
     }
-    r.check(pool.bind().active_count() == 0, "dead enemy returned to the pool");
+    r.check(
+        pool.bind().active_count() == 0,
+        "dead enemy returned to the pool",
+    );
     r.check(
         pool.bind().available_count() == 48,
         "pool is whole again -- nothing was freed",
@@ -380,11 +396,17 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
     let player_node = player.clone().upcast::<Node3D>();
     state.bind_mut().points = 0;
     door.bind_mut().interact(player_node.clone());
-    r.check(!yard.bind().is_open(), "door does nothing when you cannot afford it");
+    r.check(
+        !yard.bind().is_open(),
+        "door does nothing when you cannot afford it",
+    );
 
     state.bind_mut().points = 1000;
     door.bind_mut().interact(player_node.clone());
-    r.check(yard.bind().is_open(), "door opened the zone when affordable");
+    r.check(
+        yard.bind().is_open(),
+        "door opened the zone when affordable",
+    );
     r.check(state.bind().points == 250, "door charged 750");
 
     director.bind_mut().refresh_spawn_points();
@@ -411,10 +433,15 @@ async fn loop_systems(runner: &Gd<Node>, r: &mut Results) {
     state.bind_mut().points = 1000;
     wall_buy.bind_mut().interact(player_node);
     let reserve = weapon.bind().get_reserve();
-    r.check(reserve == 130, &format!("wall buy granted ammo ({reserve})"));
+    r.check(
+        reserve == 130,
+        &format!("wall buy granted ammo ({reserve})"),
+    );
     r.check(state.bind().points == 500, "wall buy charged 500");
     r.check(
-        wall_buy.bind().can_interact(player.clone().upcast::<Node3D>()),
+        wall_buy
+            .bind()
+            .can_interact(player.clone().upcast::<Node3D>()),
         "wall buy is reusable",
     );
 
